@@ -3,6 +3,7 @@ from django.db import models
 class BlogCategory(models.Model):
     name = models.CharField(verbose_name = 'Имя категории', max_length = 255)
 
+
     def __str__(self):
         return self.name
 
@@ -10,12 +11,24 @@ class BlogCategory(models.Model):
         verbose_name = 'Категория блога'
         verbose_name_plural = 'Категории блога'
 
+class Tag(models.Model):
+    name = models.CharField(verbose_name = 'Тэг', max_length = 255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Тэг статьи'
+        verbose_name_plural = 'Тэги статьи'
+
+
 class Article(models.Model):
     category = models.ForeignKey(to=BlogCategory,verbose_name='Категория', on_delete=models.CASCADE)
     title = models.CharField(verbose_name='Заголовок', max_length=225)
     text_preview = models.TextField(verbose_name='Текст-превью', null=True, blank=True)
     text = models.TextField(verbose_name='Текст')
     publish_date = models.DateTimeField(verbose_name='Дата публикации')
+    tags = models.ManyToManyField(to=Tag, verbose_name='Тэги', blank=True)
     updated_at = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
     created_at = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
 
@@ -26,14 +39,3 @@ class Article(models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
 
-class Tag(models.Model):
-    name = models.CharField(verbose_name = 'Тэг', max_length = 255)
-    tags = models.ManyToManyField(Article)
-
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Тэг статьи'
-        verbose_name_plural = 'Тэги статьи'
