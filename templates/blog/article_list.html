@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <h2>{{ category.name }}</h2>
 
 {% for article in  articles %}
@@ -5,3 +7,5 @@
     <p>{{ article.text_preview }}</p>
     <br>
 {% endfor %}
+{% endblock %}
+
