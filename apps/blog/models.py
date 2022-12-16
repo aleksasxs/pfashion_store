@@ -1,7 +1,17 @@
 from django.db import models
+from imagekit.models import ProcessedImageField, ImageSpecField
+from pilkit.processors import ResizeToFill
 
 class BlogCategory(models.Model):
     name = models.CharField(verbose_name = 'Имя категории', max_length = 255)
+    # image = models.ImageField(verbose_name='Изображение', upload_to='blog/category/', null=True)
+    image = ProcessedImageField(
+        verbose_name='Изображение',
+        upload_to='blog/category/',
+        processors=[ResizeToFill(600,400)],
+        null=True,
+        blank=True
+    )
 
 
     def __str__(self):
@@ -29,6 +39,16 @@ class Article(models.Model):
     text = models.TextField(verbose_name='Текст')
     publish_date = models.DateTimeField(verbose_name='Дата публикации')
     tags = models.ManyToManyField(to=Tag, verbose_name='Тэги', blank=True)
+    image = ProcessedImageField(
+        verbose_name='Изображение',
+        upload_to='blog/article/',
+        null=True,
+        blank=True
+    )
+    image_thumbnail = ImageSpecField(
+        source='image',
+        processors=[ResizeToFill(600,400)]
+    )
     updated_at = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
     created_at = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
 
