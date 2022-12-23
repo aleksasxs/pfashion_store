@@ -38,9 +38,12 @@ class ArticleAdmin(admin.ModelAdmin):
     category_link.short_description = 'Категория'
 
     def tag_link(self,instance):
-        tags = Article.tags.all()
-        for tags in tags:
-            url = reverse('admin:blog_tag_change', args=[instance.tag_id])
-            return format_html(f"<a href='{url}'>{instance.tag.name}</a>")
+        tags = instance.tags.all()
+        data = []
+        for tag in tags:
+            url = reverse('admin:blog_tag_change', args=[tag.id])
+            data.append(f"<a href='{url}'>{tag.name}</a>")
+        result = ','.join(data)
+        return format_html(result)
 
     tag_link.short_description = 'Тэги'
