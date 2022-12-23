@@ -27,7 +27,7 @@ class BlogCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['id','title','category_link','publish_date','created_at']
+    list_display = ['id','title','category_link','publish_date','created_at','tag_link']
     list_display_links = ['id','title']
     list_filter = ['category','tags']
 
@@ -36,3 +36,11 @@ class ArticleAdmin(admin.ModelAdmin):
         return format_html(f"<a href='{url}'>{instance.category.name}</a>")
 
     category_link.short_description = 'Категория'
+
+    def tag_link(self,instance):
+        tags = Article.tags.all()
+        for tags in tags:
+            url = reverse('admin:blog_tag_change', args=[instance.tag_id])
+            return format_html(f"<a href='{url}'>{instance.tag.name}</a>")
+
+    tag_link.short_description = 'Тэги'
