@@ -9,6 +9,10 @@
 
 <p>{{ article.text }}</p>
 
+<p>Автор:{{ article.user.get_full_name }}</p>
+<p><img class="img-thumbnail" src="{{ article.user.image_thumbnail.url }}" alt=""></p>
+
+
 <p>
     {% for tag in article.tags.all %}
         <a href="{% url 'tag_view' tag_id=tag.id %}">#{{ tag.name }}</a>

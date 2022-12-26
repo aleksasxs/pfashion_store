@@ -37,3 +37,7 @@ class User(AbstractUser):
 
     image_tag.short_description = 'Текущий аватар'
 
+    
+
+
+
