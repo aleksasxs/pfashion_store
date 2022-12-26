@@ -27,7 +27,7 @@ class UserAdmin(UserAdmin):
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
 
-    list_display = ("id","username", "email", "first_name", "last_name","image_tag_thumbnail", "is_staff")
+    list_display = ("id","username", "email", "first_name", "last_name", "image_tag_thumbnail","is_staff",)
     list_filter = ("is_staff", "is_superuser", "is_active", "groups")
     search_fields = ("username", "first_name", "last_name", "email")
     readonly_fields = ['image_tag']
