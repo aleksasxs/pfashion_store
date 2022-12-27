@@ -1,28 +1,42 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>{{ article.title }}</h2>
+    <h2>{{ article.title }}</h2>
     {% if article.image %}
         <img class="img-thumbnail" src="{{ article.image.url }}" alt="">
     {% endif %}
 
 
-<p>{{ article.text }}</p>
+    <p>{{ article.text }}</p>
 
-<p>Автор:{{ article.user.get_full_name }}</p>
-<p><img class="img-thumbnail" src="{{ article.user.image_thumbnail.url }}" alt=""></p>
+    <p>
+        {% for tag in article.tags.all %}
+            <a href="{% url 'tag_view' tag_id=tag.id %}">#{{ tag.name }}</a>
+        {% endfor %}
+    </p>
 
+    <p style="text-align: right">
+        Дата: <b>{{ article.publish_date }}</b>
+        Категория: <b>{{ category.name }}</b>
+    </p>
 
-<p>
-    {% for tag in article.tags.all %}
-        <a href="{% url 'tag_view' tag_id=tag.id %}">#{{ tag.name }}</a>
-    {% endfor %}
-</p>
+    {% if article.user %}
+        <div class="text-end">
+            <div class="author">
+                {% if article.user.image %}
+                    <span class="avatar">
+                        <img src="{{ article.user.image_thumbnail.url }}" alt="">
+                    </span>
+                {% endif %}
+                {% if article.user.first_name %}
+                    <span class="author-name">{{ article.user.first_name }} {{ article.user.last_name }}</span>
+                {% else %}
+                    <span class="author-name">{{ article.user.username }}</span>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
 
-<p style="text-align: right">
-    Дата: <b>{{ article.publish_date }}</b>
-    Категория: <b>{{ category.name }}</b>
-</p>
 
 {% endblock %}
 
