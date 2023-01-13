@@ -71,6 +71,11 @@ class Article(MetaTagMixin):
     updated_at = models.DateTimeField(verbose_name='Дата изменения', auto_now=True)
     created_at = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True)
 
+    def get_meta_title(self):
+        if self.meta_title:
+            return self.meta_title
+        return self.title
+
     def __str__(self):
         return self.title
 
