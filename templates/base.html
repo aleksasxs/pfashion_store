@@ -30,7 +30,14 @@
         <div class="col-6">
             <img src="{% static 'img/2.png' %}" alt="" id="logo">
         </div>
-        <div class="col-6"><p class="header-text">The best fashion shop ever!</p></div>
+        <div class="col-6">
+            <p class="header-text">The best fashion shop ever!</p>
+            {% if request.user.is_authenticated %}
+                <p class="text-end">Привет, {{ request.user.username }} (<a href="{% url 'logout' %}">Выйти</a>)</p>
+            {% else %}
+                <p class="text-end"><a href="{% url 'login' %}">Войти</a>&nbsp;<a href="{% url 'register' %}">Зарегитрироваться</a></p>
+            {% endif %}
+        </div>
     </div>
     <div class="row main-menu">
         <nav class="navbar navbar-expand-lg bg-light">
