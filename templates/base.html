@@ -35,7 +35,7 @@
             {% if request.user.is_authenticated %}
                 <p class="text-end">Привет, {{ request.user.username }} (<a href="{% url 'logout' %}">Выйти</a>)</p>
             {% else %}
-                <p class="text-end"><a href="{% url 'login' %}">Войти</a>&nbsp;<a href="{% url 'register' %}">Зарегитрироваться</a></p>
+                <p class="text-end"><a href="{% url 'login' %}">Войти</a>&nbsp;<a href="{% url 'register' %}">Зарегистрироваться</a></p>
             {% endif %}
         </div>
     </div>
@@ -57,6 +57,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'catalog' %}">Каталог</a>
                         </li>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'cart' %}">Корзина</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
