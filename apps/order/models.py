@@ -2,7 +2,6 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.catalog.models import Product
-from apps.main.mixins import MetaTagMixin
 from apps.user.models import User
 
 
