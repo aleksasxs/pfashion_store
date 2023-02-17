@@ -1,10 +1,22 @@
-from rest_framework import generics, permissions, viewsets
-from apps.blog.models import Article
-from apps.api.blog.serializers import ArticleSerializer
+from rest_framework import permissions, viewsets, status
+from apps.blog.models import Article, Tag
+from rest_framework.response import Response
+from apps.api.blog.serializers import ArticleWriteSerializer, ArticleReadSerializer
 
 
-class ArticleListView(generics.ListAPIView):
-    serializer_class = ArticleSerializer
+class ArticleViewSet(viewsets.ModelViewSet):
+    serializer_class = ArticleReadSerializer
+    queryset = Article.objects.all()
+
+    def get_serializer_class(self):
+        if self.action in ['create', 'update']:
+            return ArticleWriteSerializer
+        return self.serializer_class
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'destroy']:
+            return [permission() for permission in [permissions.IsAdminUser]]
+        return [permission() for permission in [permissions.AllowAny]]
 
     def get_queryset(self):
         queryset = Article.objects.all()
@@ -19,36 +31,18 @@ class ArticleListView(generics.ListAPIView):
 
         return queryset
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        tags = []
+        for tag_name in serializer.validated_data.get('tags'):
+            tag = Tag.objects.filter(name=tag_name).first()
+            if not tag:
+                tag = Tag.objects.create(name=tag_name)
+            tags.append(tag)
 
-class ArticleDetailView(generics.RetrieveAPIView):
-    serializer_class = ArticleSerializer
-    queryset = Article.objects.all()
+        article = serializer.save(user=self.request.user, tags=tags)
 
-class ArticleCreateView(generics.CreateAPIView):
-    serializer_class = ArticleSerializer
-    queryset = Article.objects.all()
-    permission_classes = [permissions.IsAdminUser]
+        read_serializer = self.serializer_class(article, context={"request": request})
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-class ArticleUpdateView(generics.UpdateAPIView):
-    serializer_class = ArticleSerializer
-    queryset = Article.objects.all()
-    permission_classes = [permissions.IsAdminUser]
-
-class ArticleDeleteView(generics.DestroyAPIView):
-    serializer_class = ArticleSerializer
-    queryset = Article.objects.all()
-    permission_classes = [permissions.IsAdminUser]
-
-
-
-# class ArticleViewSet(viewsets.ModelViewSet):
-#     serializer_class = ArticleSerializer
-#     queryset = Article.objects.all()
-#
-#     def get_permissions(self):
-#         if self.action in ['create', 'update', 'destroy']:
-#             return [permission() for permission in [permissions.IsAdminUser]]
-#         return [permission() for permission in [permissions.AllowAny]]
+        return Response(read_serializer.data, status=status.HTTP_201_CREATED)
