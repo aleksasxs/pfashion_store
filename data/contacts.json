@@ -1,0 +1,12 @@
+{
+  "model": "main.page",
+  "pk": 3,
+  "fields": {
+    "name": "Контакты",
+    "slug": "contacts",
+    "text": "Наши контакты",
+    "meta_title": "Контакты",
+    "meta_description": "Контакты",
+    "meta_keywords": "Контакты"
+  }
+}

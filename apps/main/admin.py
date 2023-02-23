@@ -7,3 +7,4 @@ class PageAdmin(admin.ModelAdmin):
     pass
 
 
+
