@@ -46,6 +46,39 @@
         </div>
     {% endif %}
 
+    {% for comment in comments %}
+        <h4>{{ comment.name }}</h4>
+        <h5>{{ comment.text }}</h5>
+    {% endfor %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="name" class="form-label">Название комментария</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ form.data.name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">Имя пользователя</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ form.data.username }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" required value="{{ form.data.email }}">
+                </div>
+                <div class="mb-3">
+                    <label for="comment" class="form-label">Текст комментария</label>
+                    <textarea name="comment" id="comment" class="form-control" rows="3">{{ form.data.text }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Создать комментарий</button>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
 

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block meta_tags %}
+    {% include '_meta_tags.html' with meta_title='Комментарий был успешно сохранён!' %}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '_breadcrumbs.html' %}
+{% endblock %}
+
+{% block content %}
+
+    <h2>Комментарий был успешно сохранён!</h2>
+    <p class="text-center">
+        <a href="{% url 'blog_article_view' article_id=article.id category_id=article.category.id %}" class="btn btn-primary">Назад</a>
+    </p>
+{% endblock %}
